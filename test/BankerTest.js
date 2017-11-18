@@ -8,8 +8,8 @@ contract('Banker', function(accounts) {
   });
 
   it("Initial players turn", async function() {
-    let isPlayerZeroTurn = await banker.isTurn( accounts[0] );
-    let isPlayerOneTurn = await banker.isTurn( accounts[1] );
+    let isPlayerZeroTurn = await banker.isTurnOf( accounts[0] );
+    let isPlayerOneTurn = await banker.isTurnOf( accounts[1] );
 
     assert.isTrue(isPlayerZeroTurn);
     assert.isFalse(isPlayerOneTurn);
@@ -35,7 +35,6 @@ contract('Banker', function(accounts) {
       }else{
         assert.equal(playerBalance, 1500);
       }
-
     }
   });
 });

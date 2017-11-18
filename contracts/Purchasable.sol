@@ -6,20 +6,26 @@ contract Purchasable {
   address public owner;
   address public bankerAddress;
   uint public priceAmount;
+  string public assetName;
 
-  function Purchasable(address _bankerAddress, uint _priceAmount) public {
-    owner = msg.sender;
+  function Purchasable(string _assetName, uint _priceAmount, address _bankerAddress) public {
+    // Only the banker can emit purchasables
     bankerAddress = _bankerAddress;
     priceAmount = _priceAmount;
+    assetName = _assetName;
   }
 
   function purchasedBy(address _buyer) public {
-    require( owner == bankerAddress );
+    // Can only be bougth if has no owner already
+    require( address(0) == owner );
 
     var banker = Banker(bankerAddress);
-    require( banker.isTurn(_buyer) );
+    require( banker.isTurnOf(_buyer) );
     require( banker.transferFrom(_buyer, priceAmount) );
     owner = _buyer;
   }
 
+  function (){
+    // fallback
+  }
 }
