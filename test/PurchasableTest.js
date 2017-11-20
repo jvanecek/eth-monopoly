@@ -10,7 +10,17 @@ contract('Purchasable', function(accounts) {
     purchasable = await Purchasable.new("Park Place", 350, banker);
   });
 
-  it("First purchasable test", async function() {
+  it("Creation", async function(){
+      let assetName = await purchasable.assetName();
+      let priceAmount = await purchasable.priceAmount();
+      let bankerAddress = await purchasable.bankerAddress();
+
+      assert.equal( assetName, "Park Place" );
+      assert.equal( priceAmount, 350 );
+      assert.equal( bankerAddress, banker );
+  });
+
+  it("Purchased by player zero", async function() {
     let assetOwner = await purchasable.owner();
     let buyersBalance = await banker.balanceOf( accounts[0] );
 
@@ -22,8 +32,8 @@ contract('Purchasable', function(accounts) {
     assetOwner = await purchasable.owner();
     buyersBalance = await banker.balanceOf( accounts[0] );
 
-    assert.equal( buyersBalance, 1150 );
     assert.equal( assetOwner, accounts[0] );
+    assert.equal( buyersBalance.toString(), "1150" );
   });
 
 });

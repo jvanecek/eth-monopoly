@@ -37,4 +37,8 @@ contract('Banker', function(accounts) {
       }
     }
   });
+
+  it("Can't transfer if not turn", async function(){
+    await banker.transferFrom(accounts[1], 100)
+  });
 });

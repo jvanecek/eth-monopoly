@@ -17,12 +17,13 @@ contract Banker is BasicToken, OwnableNotTransferible {
     playersTurn = _players[0];
   }
 
-  function isTurnOf(address _player) public returns (bool){
+  function isTurnOf(address _player) constant public returns (bool){
     return playersTurn == _player;
   }
 
   function transferFrom(address _buyer, uint priceAmount) public returns (bool){
     require( priceAmount <= balances[_buyer] );
+    require( isTurnOf(_buyer) );
     balances[_buyer] -= priceAmount;
     return true;
   }
