@@ -20,13 +20,8 @@ contract Purchasable {
     // Can only be bougth if has no owner already
     require( address(0) == owner );
 
-    // Not working!
-    // let banker = Banker(bankerAddress);
-    // banker.transferFrom(_buyer, priceAmount);
-    require( bankerAddress.call(bytes4(sha3("transferFrom(address,uint)")), _buyer, priceAmount) );
-
+    Banker(bankerAddress).transferFrom(_buyer, priceAmount);
     owner = _buyer;
-
     LogPurchase(assetName, _buyer, priceAmount);
   }
 

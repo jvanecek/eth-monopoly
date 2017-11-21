@@ -39,6 +39,11 @@ contract('Banker', function(accounts) {
   });
 
   it("Can't transfer if not turn", async function(){
-    await banker.transferFrom(accounts[1], 100)
+    try{
+      await banker.transferFrom(accounts[1], 100);
+      assert.isTrue(false);
+    }catch(e){
+      assert.isTrue(true);
+    }
   });
 });

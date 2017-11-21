@@ -7,7 +7,7 @@ contract('Purchasable', function(accounts) {
 
   beforeEach(async function() {
     banker = await Banker.new(1500, accounts);
-    purchasable = await Purchasable.new("Park Place", 350, banker);
+    purchasable = await Purchasable.new("Park Place", 350, banker.address);
   });
 
   it("Creation", async function(){
@@ -17,7 +17,7 @@ contract('Purchasable', function(accounts) {
 
       assert.equal( assetName, "Park Place" );
       assert.equal( priceAmount, 350 );
-      assert.equal( bankerAddress, banker );
+      assert.equal( bankerAddress, banker.address );
   });
 
   it("Purchased by player zero", async function() {
