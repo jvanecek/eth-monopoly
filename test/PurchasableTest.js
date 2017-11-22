@@ -36,4 +36,25 @@ contract('Purchasable', function(accounts) {
     assert.equal( buyersBalance.toString(), "1150" );
   });
 
+  it("Player one pays rent to player zero", async function() {
+    let buyersBalance = await banker.balanceOf( accounts[0] );
+    let payersBalance = await banker.balanceOf( accounts[1] );
+
+    assert.equal( buyersBalance, 1500 );
+
+    await purchasable.purchasedBy( accounts[0] );
+
+    buyersBalance = await banker.balanceOf( accounts[0] );
+
+    assert.equal( buyersBalance.toString(), "1150" );
+
+    await purchasable.payRent( accounts[1] );
+
+    buyersBalance = await banker.balanceOf( accounts[0] );
+    payersBalance = await banker.balanceOf( accounts[1] );
+
+    assert.equal( buyersBalance.toString(), "1185" );
+    assert.equal( payersBalance.toString(), "1465" );
+  });
+
 });

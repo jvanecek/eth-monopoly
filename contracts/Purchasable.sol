@@ -25,7 +25,14 @@ contract Purchasable {
     LogPurchase(assetName, _buyer, priceAmount);
   }
 
-  function (){
+  function payRent(address _payer) public {
+    require( address(0) != owner );
+
+    // Arbitrarily defined of the rent to the 10% of the priceAmount
+    require( Banker(bankerAddress).transferBetween(_payer, owner, priceAmount/10) );
+  }
+
+  function () public {
     // fallback
   }
 }

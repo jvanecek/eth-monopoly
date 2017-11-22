@@ -28,7 +28,13 @@ contract Banker is BasicToken, OwnableNotTransferible {
     return true;
   }
 
-  function (){
+  function transferBetween(address payerPlayer, address beneficiaryPlayer, uint priceAmount) public returns (bool){
+    balances[payerPlayer] -= priceAmount;
+    balances[beneficiaryPlayer] += priceAmount;
+    return true;
+  }
+
+  function () public {
     // fallback
   }
 }
