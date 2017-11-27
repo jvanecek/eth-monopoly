@@ -2,48 +2,49 @@ var Banker = artifacts.require("../contracts/Banker.sol");
 
 contract('Banker', function(accounts) {
   let banker;
+  let gameId = 1;
+  let anotherGameId = 2;
 
   beforeEach(async function() {
-    banker = await Banker.new(1500, accounts);
+    banker = await Banker.new();
   });
 
-  it("Initial players turn", async function() {
-    let isPlayerZeroTurn = await banker.isTurnOf( accounts[0] );
-    let isPlayerOneTurn = await banker.isTurnOf( accounts[1] );
+  it("Securing players balances adds amount", async function() {
 
-    assert.isTrue(isPlayerZeroTurn);
-    assert.isFalse(isPlayerOneTurn);
+    let playerBalance = await banker.balanceOf( gameId, accounts[0] );
+    assert.equal(playerBalance, 0);
+
+    await banker.secureBalance(gameId, accounts[0], 1500);
+
+    playerBalance = await banker.balanceOf( gameId, accounts[0] );
+    assert.equal(playerBalance, 1500);
+
+    playerBalance = await banker.balanceOf( anotherGameId, accounts[0] );
+    assert.equal(playerBalance, 0);
+
   });
 
-  it("Initial players balances", async function() {
+  it("Balance transfers substracts amount", async function() {
+    await banker.secureBalance(gameId, accounts[0], 1500);
+    await banker.transferFrom(gameId, accounts[0], 100)
 
-    for( i = 0; i < accounts.length; i++ ){
-      let playerBalance = await banker.balanceOf( accounts[i] );
-
-      assert.equal(playerBalance, 1500);
-    }
+    let playerBalance = await banker.balanceOf( gameId, accounts[0] );
+    assert.equal(playerBalance, 1400);
   });
 
-  it("Balance after player zero transfers", async function() {
-    await banker.transferFrom(accounts[0], 100)
+  it("Balance transfering between players", async function() {
+    await banker.secureBalance(gameId, accounts[0], 1500);
 
-    for( i = 0; i < accounts.length; i++ ){
-      let playerBalance = await banker.balanceOf( accounts[i] );
+    let playerZeroBalance = await banker.balanceOf( gameId, accounts[0] );
+    let playerOneBalance = await banker.balanceOf( gameId, accounts[1] );
+    assert.equal(playerZeroBalance, 1500);
+    assert.equal(playerOneBalance, 0);
 
-      if( i == 0 ){
-        assert.equal(playerBalance, 1400);
-      }else{
-        assert.equal(playerBalance, 1500);
-      }
-    }
-  });
+    await banker.transferBetween(gameId, accounts[0], accounts[1], 1400);
 
-  it("Can't transfer if not turn", async function(){
-    try{
-      await banker.transferFrom(accounts[1], 100);
-      assert.isTrue(false);
-    }catch(e){
-      assert.isTrue(true);
-    }
+    playerZeroBalance = await banker.balanceOf( gameId, accounts[0] );
+    playerOneBalance = await banker.balanceOf( gameId, accounts[1] );
+    assert.equal(playerZeroBalance, 100);
+    assert.equal(playerOneBalance, 1400);
   });
 });

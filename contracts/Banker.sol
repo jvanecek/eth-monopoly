@@ -3,35 +3,40 @@ pragma solidity ^0.4.11;
 import './zeppelin/BasicToken.sol';
 import './OwnableNotTransferible.sol';
 
-contract Banker is BasicToken, OwnableNotTransferible {
+contract Banker is OwnableNotTransferible {
 
-  address public playersTurn;
+  mapping(uint256 => mapping(address => uint256)) balances;
 
-  function Banker(uint _startingBalance, address[] _players) public{
-    require( _players.length > 1 );
+  event TransferToNoOne(uint256 gameId, address payer, uint priceAmount);
+  event TransferBetween(uint256 gameId, address payer, address beneficiary, uint priceAmount);
 
-    for( uint i = 0; i < _players.length; i++ ){
-      balances[_players[i]] = _startingBalance;
-    }
+  function Banker() public {
 
-    playersTurn = _players[0];
   }
 
-  function isTurnOf(address _player) constant public returns (bool){
-    return playersTurn == _player;
-  }
-
-  function transferFrom(address _buyer, uint priceAmount) public returns (bool){
-    require( priceAmount <= balances[_buyer] );
-    require( isTurnOf(_buyer) );
-    balances[_buyer] -= priceAmount;
+  function secureBalance(uint256 gameId, address player, uint256 amount) public returns(bool){
+    // chequear como sacarle el balance al jugador
+    balances[gameId][player] += amount;
     return true;
   }
 
-  function transferBetween(address payerPlayer, address beneficiaryPlayer, uint priceAmount) public returns (bool){
-    balances[payerPlayer] -= priceAmount;
-    balances[beneficiaryPlayer] += priceAmount;
+  function transferFrom(uint256 gameId, address _buyer, uint priceAmount) public returns (bool){
+    require( priceAmount <= balances[gameId][_buyer] );
+    balances[gameId][_buyer] -= priceAmount;
+    TransferToNoOne(gameId, _buyer, priceAmount);
     return true;
+  }
+
+  function transferBetween(uint256 gameId, address payer, address beneficiary, uint priceAmount) public returns (bool){
+    require( priceAmount <= balances[gameId][payer] );
+    balances[gameId][payer] -= priceAmount;
+    balances[gameId][beneficiary] += priceAmount;
+    TransferBetween(gameId, payer, beneficiary, priceAmount);
+    return true;
+  }
+
+  function balanceOf( uint256 _gameId, address _player ) public view returns(uint256) {
+    return balances[_gameId][_player];
   }
 
   function () public {
