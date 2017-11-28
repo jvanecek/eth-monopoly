@@ -15,6 +15,7 @@ contract MonopolyBoard is OwnableNotTransferible {
   mapping( uint256 => mapping(address => uint) ) playerPositions;
 
   event LogBoardCreated( uint256 _gameId );
+  event LogBoardFallback();
 
   /*********** Constructors ***********/
   function MonopolyBoard(address _banker) public {
@@ -81,5 +82,9 @@ contract MonopolyBoard is OwnableNotTransferible {
   function movePlayer(uint256 _gameId, uint diceNumber) public {
     uint totalSpaces = assetsPerGame[_gameId].length;
     playerPositions[_gameId][msg.sender] = (playerPositions[_gameId][msg.sender]+diceNumber) % totalSpaces;
+  }
+
+  function () public {
+    LogBoardFallback();
   }
 }

@@ -7,23 +7,21 @@ contract Banker is OwnableNotTransferible {
 
   mapping(uint256 => mapping(address => uint256)) balances;
 
-  event TransferToNoOne(uint256 gameId, address payer, uint priceAmount);
-  event TransferBetween(uint256 gameId, address payer, address beneficiary, uint priceAmount);
+  event LogBalanceSecured(uint256 gameId, address payer, uint priceAmount);
+  event LogTransferToNoOne(uint256 gameId, address payer, uint priceAmount);
+  event LogTransferBetween(uint256 gameId, address payer, address beneficiary, uint priceAmount);
+  event LogBankerFallback();
 
-  function Banker() public {
-
-  }
-
-  function secureBalance(uint256 gameId, address player, uint256 amount) public returns(bool){
+  function secureBalance(uint256 gameId, address player, uint256 amount) public{
     // chequear como sacarle el balance al jugador
     balances[gameId][player] += amount;
-    return true;
+    LogBalanceSecured(gameId, player, amount);
   }
 
   function transferFrom(uint256 gameId, address _buyer, uint priceAmount) public returns (bool){
     require( priceAmount <= balances[gameId][_buyer] );
     balances[gameId][_buyer] -= priceAmount;
-    TransferToNoOne(gameId, _buyer, priceAmount);
+    LogTransferToNoOne(gameId, _buyer, priceAmount);
     return true;
   }
 
@@ -31,7 +29,7 @@ contract Banker is OwnableNotTransferible {
     require( priceAmount <= balances[gameId][payer] );
     balances[gameId][payer] -= priceAmount;
     balances[gameId][beneficiary] += priceAmount;
-    TransferBetween(gameId, payer, beneficiary, priceAmount);
+    LogTransferBetween(gameId, payer, beneficiary, priceAmount);
     return true;
   }
 
@@ -40,6 +38,6 @@ contract Banker is OwnableNotTransferible {
   }
 
   function () public {
-    // fallback
+     LogBankerFallback();
   }
 }

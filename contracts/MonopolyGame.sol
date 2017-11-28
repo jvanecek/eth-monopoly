@@ -6,14 +6,16 @@ import './OwnableNotTransferible.sol';
 contract  MonopolyGame is OwnableNotTransferible {
   address bankerAddress;
   address boardAddress;
-  uint256 lastGameId;
   mapping( uint256 => address[] ) playersPerGameId;
   mapping( address => uint256[] ) gamePlayingPerPlayer;
   mapping( uint256 => bool ) startedGames;
 
+  uint256 public lastGameId;
+
   event LogAddedNewPlayer(uint256 gameId, address player, uint256 initialBalance);
   event LogGameCreated(uint256 gameId);
-
+  event LogGameFallback();
+  
   function MonopolyGame(address _banker, address _monopolyBoard) public {
     bankerAddress = _banker;
     boardAddress = _monopolyBoard;
@@ -33,12 +35,15 @@ contract  MonopolyGame is OwnableNotTransferible {
     require( !startedGames[_gameId] );
     require( _initialBalance == 1500 );
 
-    LogAddedNewPlayer(_gameId,_player,_initialBalance);
-
     //Banker(bankerAddress).secureBalance(_gameId,_player,_initialBalance);
+	//ver https://ethereum.stackexchange.com/questions/3667/difference-between-call-callcode-and-delegatecall
+    if( !bankerAddress.delegatecall(bytes4(keccak256("secureBalance(uint256,address,uint256)")),_gameId,_player,_initialBalance) )
+      revert();
+
     playersPerGameId[_gameId].push(_player);
     gamePlayingPerPlayer[_player].push(_gameId);
 
+    LogAddedNewPlayer(_gameId,_player,_initialBalance);
   }
 
   function start(uint256 _gameId) public {
@@ -54,4 +59,7 @@ contract  MonopolyGame is OwnableNotTransferible {
     MonopolyBoard(boardAddress).movePlayer(_gameId, diceNumber);
   }
 
+  function () public {
+     LogGameFallback();
+  }
 }

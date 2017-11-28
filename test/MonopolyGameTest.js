@@ -45,9 +45,17 @@ contract('MonopolyGame', function(accounts) {
       'Should not be able to add to an inexistent game');
 
     await game.createNew();
-    gameId = 1;
+    gameId = await game.lastGameId();
+
+  	assert.equal( gameId.toNumber(), 1 );
+
+  	let playerBalance = await banker.balanceOf(gameId, playerOne);
+  	assert.equal(playerBalance.toNumber(), 0);
+
     await game.addPlayer(gameId, playerOne, 1500);
 
+  	playerBalance = await banker.balanceOf(gameId, playerOne);
+  	assert.equal(playerBalance.toNumber(), 1500);
   });
-  
+
 });
