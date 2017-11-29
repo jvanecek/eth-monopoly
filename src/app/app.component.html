@@ -16,10 +16,12 @@
           </div>
         </div>
         <div class="form-group">
+          Balance Disponible <strong>{{ currentAddressBalance || 0 }} ETH</strong>
+        </div>
+        <div class="form-group">
           <button class="btn btn-default" (click)="donateTo(beneficiaryAddress.value, donatedAmount.value)">Donar</button>
         </div>
       </form>
-      Tu balance es <strong>{{ currentAddressBalance || 0 }} ETH</strong>
     </div>
     <div class="col-md-6">
       <div *ngIf="hasOpenDonationCampaign;then withdrawlBlock else createDonationBlock"></div>
@@ -27,12 +29,12 @@
 
           <h1>Campaña activa</h1>
           <div>Donado hasta el momento: <strong>{{ currentDonatedAmount || 0 }} ETH</strong> ({{ completedPercentage() }})</div>
-          <div>Promocionala para que te manden a <code>{{ currentAddress }}</code></div>
+          <div class="form-group">Promocionala para que te manden a <code>{{ currentAddress }}</code></div>
 
+          <div class="form-group">
+            <button class="btn btn-default" (click)="withdrawlDonation()" ng-if="canWithdrawl">Retirar fondos</button>
+          </div>
       </ng-template>
-      <div *ngIf="canWithdrawl">
-        <button class="btn btn-default" (click)="withdrawlDonation()">Retirar fondos</button>
-      </div>
       <ng-template #createDonationBlock >
         <div class="row">
           <h1>Crea una campaña</h1>
