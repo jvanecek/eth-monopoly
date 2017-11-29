@@ -57,6 +57,8 @@ export class ContractsService {
 
   async initContracts(callback: any) {
 
+    console.log( "Por inicializar los contratos" );
+
     await this.web3Service.artifactsToContract(BankerContract)
       .then((BankerContractAbstraction) => this.Banker = BankerContractAbstraction);
     this.BankerInstance = await this.Banker.deployed();
@@ -68,6 +70,8 @@ export class ContractsService {
     await this.web3Service.artifactsToContract(MonopolyGameContract)
       .then((MonopolyGameContractAbstraction) => this.MonopolyGame = MonopolyGameContractAbstraction);
     this.MonopolyGameInstance = await this.MonopolyGame.deployed();
+
+    console.log( "Contratos inicializados." );
 
     callback();
   }

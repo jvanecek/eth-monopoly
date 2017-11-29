@@ -1,6 +1,18 @@
-<div>
-  You are logged in as player {{currentPlayerAddress || 1}}.
-</div>
-<div>
-  Create new game clicking <a (click)="createNewGame()">here</a>
+<div class="container">
+  <div>
+    Hello player {{currentPlayerAddress || N/A}}
+  </div>
+  <div>
+    Create new game clicking <a (click)="createNewGame()">here</a>
+  </div>
+  <div>
+    Last game created: <span>{{ lastGameCreated || 0 }}</span>
+  </div>
+  <div>
+    Play in the game
+    <form novalidate class="simple-form">
+      <input type="number" id="gameId" max="{{ lastGameCreated || 0 }}" step="1" ng-model="game.id" />
+      <button type="submit" id="addToGameButton" (click)="addToGameButton(game)">Play</button>
+    </form>
+  </div>
 </div>
