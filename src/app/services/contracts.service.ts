@@ -5,9 +5,7 @@ import Web3 from 'web3';
 import { Web3Service } from './web3.service';
 import getWeb3 from '../util/get-web3'
 
-import BankerContract from '../../../build/contracts/Banker.json';
-import MonopolyBoardContract from '../../../build/contracts/MonopolyBoard.json';
-import MonopolyGameContract from '../../../build/contracts/MonopolyGame.json';
+import DonatorContract from '../../../build/contracts/Donator.json';
 
 declare let window: any;
 
@@ -15,12 +13,8 @@ declare let window: any;
 export class ContractsService {
   public initialized: boolean = false;
 
-  public Banker: any;
-  public BankerInstance: any;
-  public MonopolyBoard: any;
-  public MonopolyBoardInstance: any;
-  public MonopolyGame: any;
-  public MonopolyGameInstance: any;
+  public Donator: any;
+  public DonatorInstance: any;
 
   constructor(private web3Service: Web3Service) {
     window.addEventListener('load', (event) => {
@@ -59,17 +53,9 @@ export class ContractsService {
 
     console.log( "Por inicializar los contratos" );
 
-    await this.web3Service.artifactsToContract(BankerContract)
-      .then((BankerContractAbstraction) => this.Banker = BankerContractAbstraction);
-    this.BankerInstance = await this.Banker.deployed();
-
-    await this.web3Service.artifactsToContract(MonopolyBoardContract)
-      .then((MonopolyBoardContractAbstraction) => this.MonopolyBoard = MonopolyBoardContractAbstraction);
-    this.MonopolyBoardInstance = await this.MonopolyBoard.deployed();
-
-    await this.web3Service.artifactsToContract(MonopolyGameContract)
-      .then((MonopolyGameContractAbstraction) => this.MonopolyGame = MonopolyGameContractAbstraction);
-    this.MonopolyGameInstance = await this.MonopolyGame.deployed();
+    await this.web3Service.artifactsToContract(DonatorContract)
+      .then((DonatorContractAbstraction) => this.Donator = DonatorContractAbstraction);
+    this.DonatorInstance = await this.Donator.deployed();
 
     console.log( "Contratos inicializados." );
 

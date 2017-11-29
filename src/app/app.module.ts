@@ -16,7 +16,6 @@ import { ResourcesModule } from './resources/resources.module';
     BrowserModule,
     FormsModule,
     HttpModule,
-    ResourcesModule,
     ServicesModule
   ],
   providers: [],

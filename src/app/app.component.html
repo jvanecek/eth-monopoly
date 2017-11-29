@@ -1,18 +1,52 @@
 <div class="container">
-  <div>
-    Hello player {{currentPlayerAddress || N/A}}
+  <div class="col-md-6">
+
+    <div class="row">
+      <h1>Haz una donacion</h1>
+    </div>
+    <div class="row">
+      <form>
+        <div class="form-group">
+          <div class="input-group">
+            <input type="text" class="form-control" placeholder="Address" aria-describedby="basic-addon1">
+          </div>
+          <div class="input-group">
+            <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+            <span class="input-group-addon">ETH</span>
+          </div>
+          <button class="btn btn-default">Donar</button>
+        </div>
+      </form>
+    </div>
   </div>
-  <div>
-    Create new game clicking <a (click)="createNewGame()">here</a>
-  </div>
-  <div>
-    Last game created: <span>{{ lastGameCreated || 0 }}</span>
-  </div>
-  <div>
-    Play in the game
-    <form novalidate class="simple-form">
-      <input type="number" id="gameId" max="{{ lastGameCreated || 0 }}" step="1" ng-model="game.id" />
-      <button type="submit" id="addToGameButton" (click)="addToGameButton(game)">Play</button>
-    </form>
+  <div class="col-md-6">
+    <div *ngIf="hasOpenDonationCampaign;then withdrawlBlock else createDonationBlock">here is ignored</div>
+    <ng-template #withdrawlBlock>
+      <div class="row">
+        <h1>Campaña activa</h1>
+      </div>
+      <div class="row">
+        Current donation pool: {{ currentDonatedAmount() || 0 }}
+      </div>
+      <div class="row">
+        Promocionala para que te manden a {{ currentAddress }}
+      </div>
+    </ng-template>
+    <ng-template #createDonationBlock >
+      <div class="row">
+        <h1>Crea una campaña</h1>
+      </div>
+      <div class="row">
+        <form>
+          <div class="form-group">
+            <div class="input-group">
+              <input #minimumForWithdrawl type="text" class="form-control" placeholder="Monto de Salida">
+              <span class="input-group-addon">ETH</span>
+            </div>
+            <button class="btn btn-default" (click)="createDonationCampaing(minimumForWithdrawl.value)">Crear</button>
+          </div>
+        </form>
+      </div>
+    </ng-template>
   </div>
 </div>

@@ -9,36 +9,27 @@ import { Web3Service } from './services/web3.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
-  currentPlayerAddres: any;
-  lastGameCreated: any;
+  currentAddress: any;
 
   constructor(private contracts: ContractsService, private web3Service: Web3Service) {}
 
   ngOnInit(): void {
     this.contracts.initContracts(() => {
-      this.initializeCurrentPlayer();
-      this.updateLastGameCreated();
+      this.initializeCurrentAddress();
     });
   }
 
-  initializeCurrentPlayer(){
+  initializeCurrentAddress(){
     this.web3Service.web3.eth.getCoinbase((err, addr) => {
-      console.log( addr );
-      this.currentPlayerAddres = addr;
+      this.currentAddress = addr;
     });
   }
 
-  createNewGame(){
-    console.log( this.contracts.MonopolyGameInstance );
-    this.contracts.MonopolyGameInstance.createNew({from: this.currentPlayerAddres});
-    this.updateLastGameCreated();
+  createDonationCampaing(value){
+    this.contracts.DonatorInstance.createNew(value, {from: this.currentAddress});
   }
 
-  updateLastGameCreated(){
-    this.lastGameCreated = this.contracts.MonopolyGameInstance.lastGameId({from: this.currentPlayerAddres});
-  }
-
-  addToGameButton(gameId){
-    console.log( 'Add player to'+gameId );
+  currentDonatedAmount(){
+    this.contracts.DonatorInstance.donationStatus();
   }
 }
