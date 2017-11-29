@@ -8,11 +8,18 @@
   <div>
     Last game created: <span>{{ lastGameCreated || 0 }}</span>
   </div>
-  <div>
-    Play in the game
-    <form novalidate class="simple-form">
-      <input type="number" id="gameId" max="{{ lastGameCreated || 0 }}" step="1" ng-model="game.id" />
-      <button type="submit" id="addToGameButton" (click)="addToGameButton(game)">Play</button>
-    </form>
+
+  <div *ngIf="isAlreadyPlaying; else joinGameBlock">
+    Esta jugando, mostrar de quien es el turno
   </div>
+  <ng-template #joinGameBlock>
+    <div>
+      Play in the game
+      <form novalidate class="simple-form">
+        <input type="number" id="gameId" max="{{ lastGameCreated || 0 }}" step="1" ng-model="game.id" />
+        <button type="submit" id="addToGameButton" (click)="addToGameButton(game)">Play</button>
+      </form>
+    </div>
+  </ng-template>
+
 </div>

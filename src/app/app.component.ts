@@ -9,6 +9,7 @@ import { Web3Service } from './services/web3.service';
   styleUrls: ['./app.component.css']
 })
 export class AppComponent {
+  isAlreadyPlaying: false;
   currentPlayerAddres: any;
   lastGameCreated: any;
 
@@ -18,6 +19,7 @@ export class AppComponent {
     this.contracts.initContracts(() => {
       this.initializeCurrentPlayer();
       this.updateLastGameCreated();
+      this.isAlreadyPlaying = false;
     });
   }
 
