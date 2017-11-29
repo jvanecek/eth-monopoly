@@ -73,6 +73,12 @@ export class AppComponent {
   }
 
   withdrawlDonation(){
-    console.log( 'withdrawl')
+    this.contracts.DonatorInstance
+      .withdrawl({from: this.currentAddress})
+      .then((result)=>{
+        console.log( result );
+      },(err)=>{
+        console.log( 'Error al retirar los fondos: '+err );
+      });
   }
 }

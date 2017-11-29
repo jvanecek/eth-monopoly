@@ -26,16 +26,13 @@
       <ng-template #withdrawlBlock>
 
           <h1>Campaña activa</h1>
-          <div>Donado hasta el momento: <strong>{{ currentDonatedAmount || 0 }} ETH</strong></div>
+          <div>Donado hasta el momento: <strong>{{ currentDonatedAmount || 0 }} ETH</strong> ({{ completedPercentage() }})</div>
           <div>Promocionala para que te manden a <code>{{ currentAddress }}</code></div>
 
-          <div *ngIf="canWithdrawl";then withDrawlButton>
-            <ng-template #withDrawlButton>
-              <button class="btn btn-default" (click)="withdrawlDonation()">Retirar fondos</button>
-            </ng-template>
-          </div>
-
       </ng-template>
+      <div *ngIf="canWithdrawl">
+        <button class="btn btn-default" (click)="withdrawlDonation()">Retirar fondos</button>
+      </div>
       <ng-template #createDonationBlock >
         <div class="row">
           <h1>Crea una campaña</h1>
