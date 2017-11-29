@@ -1,52 +1,47 @@
 <div class="container">
-  <div class="col-md-6">
+  <div class="row">
+    <div class="col-md-6">
 
-    <div class="row">
       <h1>Haz una donacion</h1>
-    </div>
-    <div class="row">
       <form>
         <div class="form-group">
           <div class="input-group">
-            <input type="text" class="form-control" placeholder="Address" aria-describedby="basic-addon1">
+            <input #beneficiaryAddress type="text" class="form-control" placeholder="Address" aria-describedby="basic-addon1">
           </div>
           <div class="input-group">
-            <input type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+            <input #donatedAmount type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
             <span class="input-group-addon">ETH</span>
           </div>
-          <button class="btn btn-default">Donar</button>
+          <button class="btn btn-default" (click)="donateTo(beneficiaryAddress.value, donatedAmount.value)">Donar</button>
         </div>
       </form>
+      Tu balance es {{ currentAddressBalance || Na }}
     </div>
-  </div>
-  <div class="col-md-6">
-    <div *ngIf="hasOpenDonationCampaign;then withdrawlBlock else createDonationBlock">here is ignored</div>
-    <ng-template #withdrawlBlock>
-      <div class="row">
-        <h1>Campaña activa</h1>
-      </div>
-      <div class="row">
-        Current donation pool: {{ currentDonatedAmount() || 0 }}
-      </div>
-      <div class="row">
-        Promocionala para que te manden a {{ currentAddress }}
-      </div>
-    </ng-template>
-    <ng-template #createDonationBlock >
-      <div class="row">
-        <h1>Crea una campaña</h1>
-      </div>
-      <div class="row">
-        <form>
-          <div class="form-group">
-            <div class="input-group">
-              <input #minimumForWithdrawl type="text" class="form-control" placeholder="Monto de Salida">
-              <span class="input-group-addon">ETH</span>
+    <div class="col-md-6">
+      <div *ngIf="hasOpenDonationCampaign;then withdrawlBlock else createDonationBlock"></div>
+      <ng-template #withdrawlBlock>
+
+          <h1>Campaña activa</h1>
+          <div>Current donation pool: {{ currentDonatedAmount || 0 }}</div>
+          <div>Promocionala para que te manden a {{ currentAddress }}</div>
+
+      </ng-template>
+      <ng-template #createDonationBlock >
+        <div class="row">
+          <h1>Crea una campaña</h1>
+        </div>
+        <div class="row">
+          <form>
+            <div class="form-group">
+              <div class="input-group">
+                <input #minimumForWithdrawl type="text" class="form-control" placeholder="Monto de Salida">
+                <span class="input-group-addon">ETH</span>
+              </div>
+              <button class="btn btn-default" (click)="createDonationCampaing(minimumForWithdrawl.value)">Crear</button>
             </div>
-            <button class="btn btn-default" (click)="createDonationCampaing(minimumForWithdrawl.value)">Crear</button>
-          </div>
-        </form>
-      </div>
-    </ng-template>
+          </form>
+        </div>
+      </ng-template>
+    </div>
   </div>
 </div>

@@ -10,7 +10,8 @@
     "test": "truffle test",
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build"
+    "build": "ng build",
+    "testrpc": "./script/start_rpc.sh"
   },
   "repository": {
     "type": "git",

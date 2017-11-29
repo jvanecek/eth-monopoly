@@ -6,7 +6,6 @@ import { HttpModule } from '@angular/http';
 import { ServicesModule } from './services/services.module';
 
 import { AppComponent } from './app.component';
-import { ResourcesModule } from './resources/resources.module';
 
 @NgModule({
   declarations: [

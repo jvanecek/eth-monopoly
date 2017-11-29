@@ -31,7 +31,7 @@ start_testrpc() {
   )
 
 
-  testrpc "${accounts[@]}" --blocktime 10
+  testrpc "${accounts[@]}" 
 
   testrpc_pid=$!
 }
