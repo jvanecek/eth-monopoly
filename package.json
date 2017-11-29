@@ -11,7 +11,7 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
-    "testrpc": "./script/start_rpc.sh"
+    "startrpc": "./scripts/start_rpc.sh"
   },
   "repository": {
     "type": "git",

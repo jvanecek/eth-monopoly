@@ -2,28 +2,38 @@
   <div class="row">
     <div class="col-md-6">
 
-      <h1>Haz una donacion</h1>
+      <h1>Haz una donación</h1>
       <form>
         <div class="form-group">
-          <div class="input-group">
-            <input #beneficiaryAddress type="text" class="form-control" placeholder="Address" aria-describedby="basic-addon1">
+          <div class="input-group" style="width:100%" >
+            <input #beneficiaryAddress  style="width:100%" type="text" class="form-control" placeholder="Address" aria-describedby="basic-addon1">
           </div>
+        </div>
+        <div class="form-group">
           <div class="input-group">
-            <input #donatedAmount type="text" class="form-control" aria-label="Amount (to the nearest dollar)">
+            <input #donatedAmount type="text" class="form-control" placeholder="Monto a donar">
             <span class="input-group-addon">ETH</span>
           </div>
+        </div>
+        <div class="form-group">
           <button class="btn btn-default" (click)="donateTo(beneficiaryAddress.value, donatedAmount.value)">Donar</button>
         </div>
       </form>
-      Tu balance es {{ currentAddressBalance || Na }}
+      Tu balance es <strong>{{ currentAddressBalance || 0 }} ETH</strong>
     </div>
     <div class="col-md-6">
       <div *ngIf="hasOpenDonationCampaign;then withdrawlBlock else createDonationBlock"></div>
       <ng-template #withdrawlBlock>
 
           <h1>Campaña activa</h1>
-          <div>Current donation pool: {{ currentDonatedAmount || 0 }}</div>
-          <div>Promocionala para que te manden a {{ currentAddress }}</div>
+          <div>Donado hasta el momento: <strong>{{ currentDonatedAmount || 0 }} ETH</strong></div>
+          <div>Promocionala para que te manden a <code>{{ currentAddress }}</code></div>
+
+          <div *ngIf="canWithdrawl";then withDrawlButton>
+            <ng-template #withDrawlButton>
+              <button class="btn btn-default" (click)="withdrawlDonation()">Retirar fondos</button>
+            </ng-template>
+          </div>
 
       </ng-template>
       <ng-template #createDonationBlock >
@@ -37,6 +47,8 @@
                 <input #minimumForWithdrawl type="text" class="form-control" placeholder="Monto de Salida">
                 <span class="input-group-addon">ETH</span>
               </div>
+            </div>
+            <div class="form-group">
               <button class="btn btn-default" (click)="createDonationCampaing(minimumForWithdrawl.value)">Crear</button>
             </div>
           </form>

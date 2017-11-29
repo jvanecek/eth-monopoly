@@ -47,6 +47,14 @@ contract Donator {
     return withdrawlMinimumAmount[msg.sender];
   }
 
+  function donationStatus() public view returns(bool,uint256,uint256){
+    return (
+        hasOpenDonation[msg.sender],
+        donations[msg.sender],
+        withdrawlMinimumAmount[msg.sender]
+      );
+  }
+
   function () public {
      LogDonatorFallback();
   }
